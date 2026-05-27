@@ -1,0 +1,30 @@
+# 🚀 Winter 공지사항 웹 애플리케이션 (Notice Web App)
+
+> **Spring Boot 3** 백엔드 API 서버와 **React 19 (Vite)** 프런트엔드를 연동한 풀스택 공지사항 관리 프로젝트입니다.
+
+---
+
+## 💻 Tech Stack (사용 기술)
+
+### Backend
+- **Language / Framework:** Java 17 / Spring Boot 3.x
+- **Database / ORM:** Spring Data JPA / MySQL (또는 Oracle)
+- **Architecture:** Controller - Service - Repository - DTO/Entity 구조
+
+### Frontend
+- **Framework / Build Tool:** React 19 / Vite
+- **Styling:** Vanilla CSS (Global & Component-scoped 구조)
+- **Data Fetching:** Native Fetch API (Vite Reverse Proxy 적용)
+
+---
+
+## 📂 Project Structure (주요 폴더 구조)
+
+### 1. Backend (Spring Boot)
+```text
+src/main/java/com/winter/app/notice/
+├── NoticeController.java   # REST API 엔드포인트 제어 (JSON 데이터 반환)
+├── NoticeService.java      # 비즈니스 로직 처리 및 Entity ➡️ DTO 변환
+├── NoticeRepository.java   # Spring Data JPA 리포지토리 인터페이스
+├── NoticeEntity.java       # 데이터베이스 매핑 엔티티
+└── NoticeDTO.java          # 프런트엔드 전송용 데이터 가방

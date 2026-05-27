@@ -1,0 +1,56 @@
+/* ==========================================
+   1. 글로벌 웹 브라우저 스타일 리셋 (Reset)
+   ========================================== */
+*, *::before, *::after {
+  box-sizing: border-box; /* 패딩과 테두리가 레이아웃 크기를 해치지 않도록 고정 */
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  font-size: 16px;
+  background-color: #f8fafc; /* App.css와 어우러지는 메인 배경색 */
+  -webkit-text-size-adjust: 100%; /* 모바일 환경에서 텍스트 크기 제멋대로 바뀌는 것 방지 */
+}
+
+/* ==========================================
+   2. 표준 폰트 설정 및 가독성 최적화
+   ========================================== */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  line-height: 1.5;
+  color: #1e293b; /* 가독성이 가장 좋은 짙은 회색 */
+  -webkit-font-smoothing: antialiased; /* 맥/아이폰 글꼴 부드럽게 */
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ==========================================
+   3. 자주 쓰는 기본 내장 태그들 초기화
+   ========================================== */
+a {
+  color: inherit;
+  text-decoration: none; /* 링크 밑줄 제거 */
+}
+
+ul, ol {
+  list-style: none; /* 리스트 점(bullet) 제거 */
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  background: transparent;
+  border: none;
+}
+
+button {
+  cursor: pointer;
+}

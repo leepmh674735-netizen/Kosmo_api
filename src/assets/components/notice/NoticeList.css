@@ -1,0 +1,73 @@
+/* 공지사항 전체 컨테이너 */
+.notice-container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 24px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* 메인 타이틀 */
+.notice-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+/* 공지사항 목록 박스 */
+.notice-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* 개별 공지사항 카드 (Sub 컴포넌트 영역) */
+.notice-card {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 20px;
+    background-color: #fff;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+/* 카드에 마우스를 올렸을 때 효과 */
+.notice-card:hover {
+    transform: translateY(-3px);
+    border-color: #3b82f6;
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.1);
+}
+
+/* 카드 제목 */
+.card-title {
+    margin: 0 0 10px 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #0f172a;
+}
+
+/* 카드 본문 내용 */
+.card-content {
+    margin: 0 0 16px 0;
+    font-size: 14px;
+    color: #475569;
+    line-height: 1.6;
+}
+
+/* 하단 작성자 영역 블록 */
+.card-meta {
+    display: flex;
+    justify-content: flex-end;
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+.card-writer {
+    font-weight: 500;
+    color: #64748b;
+}
