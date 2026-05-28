@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './App.jsx'
-import './index.css' // 💡 전역 브라우저 스타일 초기화 파일 임포트
+import App from './App'
+import './index.css' 
 
 // HTML 파일(index.html)에 있는 <div id="root"> 태그를 찾아 리액트 엔진을 주입합니다.
 ReactDOM.createRoot(document.getElementById('root')).render(

@@ -1,119 +1,344 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Save, X, AlertCircle } from 'lucide-react';
-import './NotList.css';
+import Button from '../common/Button';
 
-function NoticeWrite({ user }) {
-    const navigate = useNavigate();
-    const [formData, setFormData] = useState({
-        category: '일반',
-        author: user?.name || '관리자',
-        isPinned: false,
-        title: '',
-        content: ''
-    });
-    const [errors, setErrors] = useState({ title: '', content: '' });
-    const [isSubmitting, setIsSubmitting] = useState(false);
+function NoticeWrite() {
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    title: '',
+    author: '아틀리에 매니저',
+    content: '',
+    category: '일반', // '일반', '이벤트', '중요'
+    isPinned: false
+  });
+  const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const handleChange = (e) => {
-        const { name, value, type, checked } = e.target;
-        setFormData(prev => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
-        if (errors[name]) setErrors(prev => ({ ...prev, [name]: '' }));
-    };
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+    
+    // Clear errors when typing
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: null }));
+    }
+  };
 
-    const validate = () => {
-        const newErrors = {};
-        if (!formData.title.trim()) newErrors.title = '공지사항 제목을 입력해 주세요.';
-        if (!formData.content.trim()) newErrors.content = '공지사항 내용을 입력해 주세요.';
-        setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
-    };
+  const validate = () => {
+    const newErrors = {};
+    if (!formData.title.trim()) {
+      newErrors.title = '공지사항 제목을 입력해주세요.';
+    } else if (formData.title.length < 5) {
+      newErrors.title = '제목은 최소 5자 이상이어야 합니다.';
+    }
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        if (!validate()) return;
-        setIsSubmitting(true);
+    if (!formData.content.trim()) {
+      newErrors.content = '공지사항 내용을 입력해주세요.';
+    } else if (formData.content.length < 10) {
+      newErrors.content = '내용은 최소 10자 이상 작성해주세요.';
+    }
 
-        const params = new URLSearchParams(formData);
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
-        try {
-            const response = await fetch('http://localhost:8080/notice/create', {
-                method: 'POST',
-                body: params
-            });
-            if (Number(await response.text()) > 0) {
-                alert('공지사항이 성공적으로 등록되었습니다.');
-                navigate('/notice/list');
-            } else {
-                alert('등록에 실패했습니다.');
-            }
-        } catch (err) {
-            console.error(err);
-            alert('등록 중 오류가 발생했습니다.');
-        } finally {
-            setIsSubmitting(false);
-        }
-    };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!validate()) return;
 
-    return (
-        <div className="write-container fade-in">
-            <button onClick={() => navigate('/notice/list')} className="back-btn">
-                <ArrowLeft size={16} /> 목록으로 돌아가기
-            </button>
+    setIsSubmitting(true);
 
-            <div className="write-card">
-                <div className="write-header">
-                    <h2>📢 공지사항 작성</h2>
-                    <span>새로운 소식을 고객들에게 공유하세요.</span>
-                </div>
+    try {
+      // Simulate backend API call delay
+      await new Promise(resolve => setTimeout(resolve, 1200));
 
-                <form onSubmit={handleSubmit}>
-                    <div className="form-grid">
-                        <div className="form-group">
-                            <label>구분</label>
-                            <select name="category" value={formData.category} onChange={handleChange}>
-                                <option value="일반">일반 공지</option>
-                                <option value="이벤트">이벤트 소식</option>
-                                <option value="중요">중요 안내</option>
-                            </select>
-                        </div>
-                        <div className="form-group">
-                            <label>작성자</label>
-                            <input type="text" name="author" value={formData.author} disabled className="disabled-input" />
-                        </div>
-                    </div>
+      // Mock save to localStorage or backend URL (in real backend: POST to http://localhost:8080/notice/write)
+      console.log('Submitted notice data:', formData);
+      
+      alert('공지사항이 성공적으로 등록되었습니다.');
+      navigate('/notice');
+    } catch (err) {
+      console.error(err);
+      alert('등록 중 오류가 발생했습니다.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
-                    <div className="checkbox-wrapper">
-                        <label>
-                            <input type="checkbox" name="isPinned" checked={formData.isPinned} onChange={handleChange} />
-                            게시판 상단에 고정하기 (중요 공지)
-                        </label>
-                    </div>
+  // Styling
+  const containerStyle = {
+    maxWidth: '800px',
+    margin: '40px auto',
+    padding: '0 20px',
+    width: '100%'
+  };
 
-                    <div className="form-group">
-                        <label>공지 제목</label>
-                        <input type="text" name="title" placeholder="제목을 입력하세요" value={formData.title} onChange={handleChange} className={errors.title ? 'input-error' : ''} />
-                        {errors.title && <span className="error-text"><AlertCircle size={14} /> {errors.title}</span>}
-                    </div>
+  const cardStyle = {
+    backgroundColor: 'var(--bg-milk)',
+    borderRadius: 'var(--radius-lg)',
+    padding: '32px',
+    border: '1px solid rgba(60, 42, 33, 0.08)',
+    boxShadow: 'var(--shadow-md)'
+  };
 
-                    <div className="form-group">
-                        <div className="label-space">
-                            <label>공지 내용</label>
-                            <span className="char-count">{formData.content.length} 자</span>
-                        </div>
-                        <textarea name="content" placeholder="내용을 입력해주세요." value={formData.content} onChange={handleChange} className={errors.content ? 'input-error' : ''} />
-                        {errors.content && <span className="error-text"><AlertCircle size={14} /> {errors.content}</span>}
-                    </div>
+  const headerStyle = {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: '32px',
+    borderBottom: '1px solid var(--gray-200)',
+    paddingBottom: '20px'
+  };
 
-                    <div className="action-buttons">
-                        <button type="button" onClick={() => navigate('/notice/list')} disabled={isSubmitting} className="btn-cancel"><X size={16} /> 취소</button>
-                        <button type="submit" disabled={isSubmitting} className="btn-submit"><Save size={16} /> {isSubmitting ? '등록 중...' : '등록하기'}</button>
-                    </div>
-                </form>
-            </div>
+  const titleStyle = {
+    fontSize: '24px',
+    fontWeight: '800',
+    color: 'var(--bg-coffee)',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '10px'
+  };
+
+  const formGroupStyle = {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '8px',
+    marginBottom: '24px'
+  };
+
+  const labelStyle = {
+    fontSize: '14px',
+    fontWeight: '700',
+    color: 'var(--bg-coffee)'
+  };
+
+  const inputStyle = (hasError) => ({
+    width: '100%',
+    padding: '12px 16px',
+    borderRadius: 'var(--radius-md)',
+    border: hasError ? '1.5px solid var(--accent-rust)' : '1px solid var(--gray-300)',
+    backgroundColor: '#ffffff',
+    fontSize: '15px',
+    color: 'var(--bg-coffee)',
+    outline: 'none',
+    transition: 'var(--transition-fast)',
+    boxShadow: hasError ? '0 0 0 3px rgba(210, 93, 56, 0.15)' : 'none'
+  });
+
+  const selectStyle = {
+    width: '100%',
+    padding: '12px 16px',
+    borderRadius: 'var(--radius-md)',
+    border: '1px solid var(--gray-300)',
+    backgroundColor: '#ffffff',
+    fontSize: '15px',
+    color: 'var(--bg-coffee)',
+    outline: 'none',
+    cursor: 'pointer'
+  };
+
+  const textareaStyle = (hasError) => ({
+    width: '100%',
+    padding: '16px',
+    borderRadius: 'var(--radius-md)',
+    border: hasError ? '1.5px solid var(--accent-rust)' : '1px solid var(--gray-300)',
+    backgroundColor: '#ffffff',
+    fontSize: '15px',
+    color: 'var(--bg-coffee)',
+    outline: 'none',
+    minHeight: '250px',
+    resize: 'vertical',
+    lineHeight: '1.6',
+    transition: 'var(--transition-fast)',
+    boxShadow: hasError ? '0 0 0 3px rgba(210, 93, 56, 0.15)' : 'none'
+  });
+
+  const checkboxGroupStyle = {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+    cursor: 'pointer',
+    userSelect: 'none',
+    fontSize: '14px',
+    fontWeight: '600',
+    color: 'var(--bg-coffee)'
+  };
+
+  const errorTextStyle = {
+    color: 'var(--accent-rust)',
+    fontSize: '13px',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '4px',
+    fontWeight: '500'
+  };
+
+  const actionStyle = {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    gap: '12px',
+    borderTop: '1px solid var(--gray-200)',
+    paddingTop: '24px',
+    marginTop: '12px'
+  };
+
+  return (
+    <div style={containerStyle} className="fade-in">
+      <button 
+        onClick={() => navigate('/notice')} 
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '6px',
+          background: 'none',
+          border: 'none',
+          cursor: 'pointer',
+          color: 'var(--gray-600)',
+          fontWeight: '600',
+          fontSize: '14px',
+          marginBottom: '20px',
+          transition: 'var(--transition-fast)'
+        }}
+        className="back-btn"
+      >
+        <ArrowLeft size={16} /> 목록으로 돌아가기
+      </button>
+
+      <div style={cardStyle}>
+        <div style={headerStyle}>
+          <h2 style={titleStyle}>
+            <span>📝</span>
+            <span>공지사항 작성</span>
+          </h2>
+          <span style={{ fontSize: '14px', color: 'var(--gray-600)' }}>
+            새로운 소식을 고객들에게 공유하세요.
+          </span>
         </div>
-    );
+
+        <form onSubmit={handleSubmit}>
+          {/* Category selection */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '24px' }}>
+            <div style={formGroupStyle}>
+              <label style={labelStyle}>구분</label>
+              <select 
+                name="category" 
+                value={formData.category} 
+                onChange={handleChange}
+                style={selectStyle}
+              >
+                <option value="일반">일반 공지</option>
+                <option value="이벤트">이벤트 소식</option>
+                <option value="중요">중요 안내</option>
+              </select>
+            </div>
+            
+            <div style={formGroupStyle}>
+              <label style={labelStyle}>작성자</label>
+              <input 
+                type="text" 
+                name="author" 
+                value={formData.author} 
+                disabled 
+                style={{ ...inputStyle(false), backgroundColor: 'var(--gray-100)', cursor: 'not-allowed' }}
+              />
+            </div>
+          </div>
+
+          {/* Pin Post Checkbox */}
+          <div style={{ marginBottom: '24px' }}>
+            <label style={checkboxGroupStyle}>
+              <input 
+                type="checkbox" 
+                name="isPinned" 
+                checked={formData.isPinned} 
+                onChange={handleChange}
+                style={{ width: '16px', height: '16px', accentColor: 'var(--primary-gold)' }}
+              />
+              게시판 상단에 고정하기 (중요 공지)
+            </label>
+          </div>
+
+          {/* Title Input */}
+          <div style={formGroupStyle}>
+            <label style={labelStyle}>공지 제목</label>
+            <input 
+              type="text" 
+              name="title" 
+              placeholder="공지사항 제목을 입력하세요 (예: [이벤트] 5월 가정의 달 기념 식빵 1+1 이벤트)" 
+              value={formData.title} 
+              onChange={handleChange}
+              style={inputStyle(errors.title)}
+              className="form-input"
+            />
+            {errors.title && (
+              <span style={errorTextStyle}>
+                <AlertCircle size={14} /> {errors.title}
+              </span>
+            )}
+          </div>
+
+          {/* Content Textarea */}
+          <div style={formGroupStyle}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <label style={labelStyle}>공지 내용</label>
+              <span style={{ fontSize: '12px', color: 'var(--gray-500)' }}>
+                {formData.content.length} 자
+              </span>
+            </div>
+            <textarea 
+              name="content" 
+              placeholder="내용을 구체적으로 입력해주세요. 행사 내용, 일자, 혜택 등을 자세히 설명하면 좋습니다." 
+              value={formData.content} 
+              onChange={handleChange}
+              style={textareaStyle(errors.content)}
+              className="form-textarea"
+            />
+            {errors.content && (
+              <span style={errorTextStyle}>
+                <AlertCircle size={14} /> {errors.content}
+              </span>
+            )}
+          </div>
+
+          {/* Actions */}
+          <div style={actionStyle}>
+            <Button 
+              variant="outline" 
+              onClick={() => navigate('/notice')}
+              icon={<X size={16} />}
+              disabled={isSubmitting}
+            >
+              취소
+            </Button>
+            <Button 
+              variant="primary" 
+              type="submit"
+              icon={<Save size={16} />}
+              loading={isSubmitting}
+            >
+              등록하기
+            </Button>
+          </div>
+        </form>
+      </div>
+
+      <style>{`
+        .back-btn:hover {
+          color: var(--primary-gold) !important;
+          transform: translateX(-2px);
+        }
+        .form-input:focus, .form-textarea:focus {
+          border-color: var(--primary-gold) !important;
+          box-shadow: 0 0 0 3px rgba(217, 160, 91, 0.15) !important;
+        }
+      `}</style>
+    </div>
+  );
 }
 
 export default NoticeWrite;
-export { NoticeWrite as NoticeWhite };
+export { NoticeWrite as NoticeWhite }; // Support alternate name
