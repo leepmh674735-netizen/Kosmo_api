@@ -1,41 +1,19 @@
-# ==========================================
-# 1. 의존성 라이브러리 (용량이 너무 크고 npm install로 언제든 복구 가능)
-# ==========================================
-node_modules/
-/dist
-/build
-
-# ==========================================
-# 2. 에디터 및 개발 도구 설정 파일 (내 컴퓨터 환경만 기록된 파일들)
-# ==========================================
-# VS Code 관련
-.vscode/
-*.code-workspace
-
-# IntelliJ 관련 (스프링과 리액트를 동시에 다룰 때 필수)
-.idea/
-*.iws
-*.iml
-out/
-
-# 기타 OS 시스템 파일
+!**/glob-import/root/dir/node_modules
 .DS_Store
-Thumbs.db
-
-# ==========================================
-# 3. 로그 파일 및 캐시
-# ==========================================
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+.idea
+.pnpm-store
+*.cpuprofile
+*.local
+*.log
+/.vscode/
+/docs/.vitepress/cache
+/docs/.vitepress/.temp
+/packages/vite/LICENSE
+dist
+dist-ssr
+explorations
+node_modules
+playground-temp
+temp
+TODOs.md
 .eslintcache
-.vite
-
-# ==========================================
-# 4. 환경 변수 및 보안 파일 (API 비밀키, DB 비번 등이 담길 공간 - 절대 업로드 금지)
-# ==========================================
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local

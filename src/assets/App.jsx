@@ -1,42 +1,33 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom"; // 💡 라우터 컴포넌트 추가
+import Header from "./layout/Header"; // 💡 상단 변수명과 일치하도록 조정
+import Footer from "./layout/Footer"; // 💡 상단 변수명과 일치하도록 조정
 
-
-import React from 'react';
-import NoticeList from './NoticeList'; // 1. 방금 만든 NoticeList 컴포넌트를 임포트합니다.
+// 💡 하단 주소(path)에서 사용할 실제 컴포넌트들도 import 해주어야 합니다.
+import NoticeList from "./components/NoticeList"; 
+import Login from "./components/Login"; 
 
 function App() {
-    return (
-        <div style={styles.container}>
-            <header style={styles.header}>
-                <h1>Winter 웹 프로젝트 🚀</h1>
-            </header>
-
-            <main style={styles.main}>
-                {/* 2. 화면에 공지사항 목록 컴포넌트를 조립해 줍니다. */}
-                <NoticeList />
-            </main>
-        </div>
-    );
+  return (
+    // 1. 라우팅 기능을 활성화하기 위해 최상위를 BrowserRouter로 감싸줍니다.
+    <BrowserRouter>
+      {/* 2. 전체를 하나의 큰 부모 요소(<></> 또는 <div>)로 감싸줍니다. */}
+      <>
+        {/* 상단 레이아웃 (내용이 없으므로 깔끔하게 self-closing 적용) */}
+        <Header />
+        
+        {/* 3. Routes 안에는 Route 컴포넌트만 올바르게 위치해야 합니다. */}
+        <Routes>
+          {/* element={} 내부에는 정상적인 컴포넌트 형태(<NoticeList />)로 작성합니다. */}
+          <Route path="/notice/list" element={<NoticeList />} />
+          <Route path="/member/login" element={<Login />} />
+		  <Route path="/notice/detail" element={<NotDetail />} />
+        </Routes>
+        
+        {/* 하단 레이아웃 */}
+        <Footer />
+      </>
+    </BrowserRouter>
+  );
 }
 
-// 간단한 스타일링 (선택사항, 필요 없으면 지우셔도 됩니다)
-const styles = {
-    container: {
-        fontFamily: 'Arial, sans-serif',
-        maxWidth: '800px',
-        margin: '0 auto',
-        padding: '20px',
-    },
-    header: {
-        borderBottom: '2px solid #333',
-        paddingBottom: '10px',
-        marginBottom: '20px',
-    },
-    main: {
-        backgroundColor: '#f9f9f9',
-        padding: '20px',
-        borderRadius: '8px',
-    }
-};
-
-export default App; // 3. 최상위 컴포넌트로 내보냅니다.
-export default Test;
+export default App;

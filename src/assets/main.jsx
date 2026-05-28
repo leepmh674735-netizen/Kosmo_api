@@ -8,5 +8,6 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     {/* 최상위 컴포넌트인 App을 실행합니다. */}
     <App />
+	<Brower></Brower>
   </React.StrictMode>,
 )
