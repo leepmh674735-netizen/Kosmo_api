@@ -13,12 +13,11 @@ public class NoticeService {
 	@Autowired
 	private NoticeRepository noticeRepository; 
 	
-	// 공지사항 전체 목록 조회 및 DTO 변환
 	public List<NoticeDTO> getList() throws Exception {
 		return noticeRepository.findAll().stream()
 				.map(notice -> {
 					NoticeDTO dto = new NoticeDTO();
-					dto.setId(notice.getId());
+					dto.setId(notice.getId()); 
 					dto.setTitle(notice.getTitle());
 					dto.setContent(notice.getContent());
 					dto.setAuthor(notice.getAuthor());
@@ -27,17 +26,11 @@ public class NoticeService {
 				.collect(Collectors.toList());
 	}
 	
-	// 공지사항 단건 상세 조회 및 DTO 변환
 	public NoticeDTO getDetail(Long id) throws Exception {
-		
-		// 1. 타입을 Optional<NoticeDTO>가 아닌 데이터베이스 엔티티인 Optional<Notice>로 수정합니다.
 		Optional<Notice> result = noticeRepository.findById(id);
-		
-		// 2. 값이 있으면 실제 Notice 엔티티 객체를 안전하게 꺼내옵니다.
 		Notice notice = result.orElseThrow(() -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다. id=" + id));
 		
-		// 3. 엔티티(notice) 데이터를 DTO 상자에 복사해서 채워줍니다.
-		NoticeDTO noticeDTO = new NoticeDTO();
+		NoticeDTO noticeDTO = new NoticeDTO(); 
 		noticeDTO.setId(notice.getId());
 		noticeDTO.setTitle(notice.getTitle());
 		noticeDTO.setContent(notice.getContent());
