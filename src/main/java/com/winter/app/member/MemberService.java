@@ -2,7 +2,7 @@ package com.winter.app.member;
 
 // [수정] java.lang.reflect.Member를 지우고, 프로젝트의 실제 회원 엔티티 클래스를 임포트해야 합니다.
 // (만약 MemberDTO처럼 이 패키지 안에 Member 엔티티가 같이 있다면 임포트 문을 생략해도 됩니다)
-import com.winter.app.member.Member; 
+import com.winter.app.thgmember.Member; 
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
