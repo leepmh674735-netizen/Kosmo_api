@@ -1,7 +1,11 @@
 package com.winter.app.member;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.lang.reflect.Member;
 
-public interface MemberRepository extends JpaRepository<MemberDTO, Long>{
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface MemberRepository extends JpaRepository<Member, Long>{
 	
 }

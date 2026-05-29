@@ -2,6 +2,8 @@ package com.winter.app.notice;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 
-@CrossOrigin
+@CrossOrigin(origins ="*")
 @RestController
 @RequestMapping("/notice")
 @RequiredArgsConstructor
@@ -20,18 +22,21 @@ public class NotController {
 
 	private final NoticeService noticeService;
 
-	@GetMapping("list")
+	@GetMapping("/list")
 	public List<NoticeDTO> list() throws Exception {
 		return noticeService.getList();
 	}
 
-	@GetMapping("detail/{id}")
+	@GetMapping("/detail/{id}")
 	public NoticeDTO detail(@PathVariable("id") Long id) throws Exception {
 		return noticeService.getDetail(id);
 	}
 
-	@PostMapping("create")
-	public int create(@RequestBody NoticeDTO noticeDTO) throws Exception {
-		return noticeService.create(noticeDTO);
+	@PostMapping("/create")
+	public ResponseEntity<Integer> create(@RequestBody NoticeDTO noticeDTO) throws Exception {
+		int result = noticeService.create(noticeDTO);
+		
+		return ResponseEntity.status(HttpStatus.CREATED).body(result);
+		
 	}
 }

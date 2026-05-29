@@ -27,8 +27,8 @@ public class NoticeService {
 	}
 	
 	public NoticeDTO getDetail(Long id) throws Exception {
-		Optional<Notice> result = noticeRepository.findById(id);
-		Notice notice = result.orElseThrow(() -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다. id=" + id));
+		Optional<NoticeDTO> result = noticeRepository.findById(id);
+		NoticeDTO notice = result.orElseThrow(() -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다. id=" + id));
 		
 		NoticeDTO noticeDTO = new NoticeDTO(); 
 		noticeDTO.setId(notice.getId());
