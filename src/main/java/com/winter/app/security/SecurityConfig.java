@@ -44,6 +44,7 @@ public class SecurityConfig {
             
             // 2. HTTP 요청 권한 설정
             .authorizeHttpRequests(auth -> auth
+            		
                 .requestMatchers("/notice/add").hasRole("ADMIN") // /notice/add는 ADMIN 권한 필요
                 .anyRequest().permitAll()                        // 그 외의 모든 요청은 허용
             )
