@@ -1,37 +1,38 @@
-package com.winter.app.member;
+package com.winter.app.notice;
 
-import org.springframework.security.core.userdetails.UserDetails;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
-import jakarta.validation.constraints.NotBlank; 
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.LocalDateTime;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
 @ToString
-@Table(name = "tb_users")
-public class MemberDTO implements UserDetails { 
+@Table(name = "notices")
+public class NoticeDTO {
+
     @Id
-    @NotBlank(message = "아이디는 필수 입력 항목입니다.") 
-    @Column(name = "username") 
-    private String username;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Column(nullable = false) 
-    private String password;
-
-    @Transient 
-    private String passwordCheck;
+    @CreatedDate
+    @Column(updatable = false)
+    private LocalDateTime createAt;
 
     @Column
-    private String name;
+    private String author;
+
+    @Column(columnDefinition = "TEXT")
+    private String content;
 
     @Column
-    private String email;
+    private String title;
+
+
 }
