@@ -16,7 +16,7 @@ import javax.crypto.SecretKey;
 import java.util.Date;
 
 @Component
-public class JwtTokenManager {
+public class JwtTokenManger {
 
     @Value("${jwt.accessValidTime}")
     private Long accessValidTime;
@@ -34,7 +34,7 @@ public class JwtTokenManager {
 
     private final MemberRepository memberRepository;
 
-    public JwtTokenManager(MemberRepository memberRepository) {
+    public JwtTokenManger(MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
     }
 
