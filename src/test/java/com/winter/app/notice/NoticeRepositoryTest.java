@@ -16,18 +16,18 @@ class NoticeRepositoryTest {
 	@Test
 	void test() {
 		NoticeDTO noticeDTO = new NoticeDTO();
-		noticeDTO.setBoardContents("contents");
-		noticeDTO.setBoardTitle("title");
-		noticeDTO.setBoardWriter("writer");
+		noticeDTO.setContent("contents");
+		noticeDTO.setTitle("title");
+		noticeDTO.setAuthor("writer");
 		
 		NoticeDTO notice = new NoticeDTO();
-		notice.setBoardContents(noticeDTO.getBoardContents());
-		notice.setBoardTitle(noticeDTO.getBoardTitle());
-		notice.setBoardWriter(noticeDTO.getBoardWriter());
+		notice.setContent(noticeDTO.getContent());
+		notice.setTitle(noticeDTO.getTitle());
+		notice.setAuthor(noticeDTO.getAuthor());
 		
 		NoticeDTO savedNotice = noticeRepository.save(noticeDTO);
 		assertNotNull(savedNotice);
-		assertNotNull(savedNotice.getBoardNum());
+		assertNotNull(savedNotice.getId());
 	}
 
 }
