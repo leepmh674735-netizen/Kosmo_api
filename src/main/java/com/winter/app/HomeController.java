@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Controller
+@Controller("webHomeController")
 @Slf4j
 public class HomeController {
 
