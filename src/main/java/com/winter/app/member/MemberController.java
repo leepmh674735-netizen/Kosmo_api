@@ -1,39 +1,32 @@
-package com.winter.app.notice;
+package com.winter.app.member;
 
-import lombok.AllArgsConstructor;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/notice/**")
-@AllArgsConstructor
+@RequestMapping("/member/*")
 @Slf4j
-public class NoticeController {
+public class MemberController {
 
-    private NoticeService noticeService;
+    private final MemberService memberService;
 
-
-    @GetMapping("list")
-    public List<NoticeDTO> list() throws Exception {
-        System.out.println("notice list");
-        System.out.println("main brach");
-        System.out.println("Study branch");
-        System.out.println("github 연동");
-        return noticeService.getList();
+    public MemberController(MemberService memberService) {
+        this.memberService = memberService;
     }
 
-    @GetMapping("detail/{id}")
-    public NoticeDTO detail(@PathVariable(name = "id") Long id)throws  Exception{
-        return noticeService.getDetail(id);
-    }
+    @PostMapping("join")
+    public int join(@Valid @RequestBody MemberDTO memberDTO, BindingResult bindingResult)throws  Exception{
 
-    @PostMapping("create")
-    public NoticeDTO create(@RequestBody NoticeDTO noticeDTO)throws  Exception{
-        noticeDTO.setAuthor("관리자");
-        return noticeService.create(noticeDTO);
+        memberDTO = memberService.join(memberDTO);
+
+        if(memberDTO != null){
+            return 1;
+        }else {
+            throw new Exception();
+        }
 
     }
 }

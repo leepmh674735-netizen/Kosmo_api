@@ -1,27 +1,39 @@
 package com.winter.app.notice;
 
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired; 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController; 
-
-@RestController 
+@CrossOrigin(origins = "*")
+@RestController
+@RequestMapping("/notice/**")
+@AllArgsConstructor
+@Slf4j
 public class NoticeController {
-	
-	@Autowired 
-	private NoticeService noticeService; 
-	
-	@GetMapping("/notice/list") 
-	public List<NoticeDTO> list() throws Exception {
-		
-		return noticeService.getList(); 
-	}
 
-	@GetMapping("/notice/detail/{id}")
-	public NoticeDTO detail(@PathVariable(name = "id") Long id) throws Exception { // 5. 중괄호({) 시작
-		
-		return noticeService.getDetail(id); 
-	} 
+    private NoticeService noticeService;
+
+
+    @GetMapping("list")
+    public List<NoticeDTO> list() throws Exception {
+        System.out.println("notice list");
+        System.out.println("main brach");
+        System.out.println("Study branch");
+        System.out.println("github 연동");
+        return noticeService.getList();
+    }
+
+    @GetMapping("detail/{id}")
+    public NoticeDTO detail(@PathVariable(name = "id") Long id)throws  Exception{
+        return noticeService.getDetail(id);
+    }
+
+    @PostMapping("create")
+    public NoticeDTO create(@RequestBody NoticeDTO noticeDTO)throws  Exception{
+        noticeDTO.setAuthor("관리자");
+        return noticeService.create(noticeDTO);
+
+    }
 }

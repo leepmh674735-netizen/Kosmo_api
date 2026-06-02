@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import com.springinpractice.ch01.dao.AccountDao; // 인터페이스 import
+import com.springinpractice.ch01.dao.jdbc.AccountDao; // 인터페이스 import
 import com.springinpractice.ch01.model.Account;
 
 public class AccountService {

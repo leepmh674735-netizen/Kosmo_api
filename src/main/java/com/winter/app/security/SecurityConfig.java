@@ -1,13 +1,15 @@
 package com.winter.app.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -18,11 +20,18 @@ import java.util.Arrays;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Autowired
-    private JwtTokenManger jwtTokenManger;
+    private final JwtTokenManager jwtTokenManager;
+    private final AuthenticationConfiguration authenticationConfiguration;
 
-    @Autowired
-    private AuthenticationConfiguration authenticationConfiguration;
+    public SecurityConfig(JwtTokenManager jwtTokenManager, AuthenticationConfiguration authenticationConfiguration) {
+        this.jwtTokenManager = jwtTokenManager;
+        this.authenticationConfiguration = authenticationConfiguration;
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+        return configuration.getAuthenticationManager();
+    }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
@@ -38,40 +47,26 @@ public class SecurityConfig {
         return source;
     }
 
-    //
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity security) throws  Exception{
+    public SecurityFilterChain securityFilterChain(HttpSecurity security) throws Exception {
+        AuthenticationManager authenticationManager = authenticationConfiguration.getAuthenticationManager();
+
         security
-                .cors((cors)->cors.configurationSource(corsConfigurationSource()))
-                .csrf((csrf)->csrf.disable())
-
-                //권한에 관한 설정
-                .authorizeHttpRequests((a)->{
-                    a
-                            .requestMatchers("/notice/list").authenticated()
-                            .requestMatchers("/notice/add").hasRole("ADMIN")
-                            .anyRequest().permitAll()
-                            ;
-
-                })
-
-                .formLogin((f)->f.disable())
-
-                .logout((logout)->{
-
-                })
-
-                .sessionManagement((s)->{
-                    s.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-                })
-
-                .httpBasic((h)-> h.disable())
-
-                //filter 등록
-                .addFilter(new JwtAuthenticationFilter(authenticationConfiguration.getAuthenticationManager(), jwtTokenManger))
-                .addFilter(new JwtLoginFilter(authenticationConfiguration.getAuthenticationManager(), jwtTokenManger))
-
-                ;
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/notice/list").authenticated()
+                        .requestMatchers("/notice/add").hasRole("ADMIN")
+                        .anyRequest().permitAll()
+                )
+                .formLogin(AbstractHttpConfigurer::disable)
+                .logout(logout -> {})
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+                .httpBasic(AbstractHttpConfigurer::disable)
+                .addFilterBefore(new JwtLoginFilter(authenticationManager, jwtTokenManager), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtAuthenticationFilter(authenticationManager, jwtTokenManager), JwtLoginFilter.class);
 
         return security.build();
     }
