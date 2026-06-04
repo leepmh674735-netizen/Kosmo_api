@@ -62,3 +62,11 @@ eclipse {
 		}
 	}
 }
+
+sourceSets {
+	main {
+		java {
+			exclude 'tacos/**'
+		}
+	}
+}

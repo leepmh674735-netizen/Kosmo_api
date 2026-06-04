@@ -19,7 +19,7 @@ export function AuthProvider({ children }) { // 2. fuction -> function 오타 �
         }
 
         try {
-            const data = await fetchAPI('/auth/me');
+            const data = await fetchAPI('/member/me');
             setUser(data); // sestUser -> setUser 수정
         } catch (error) {
             console.error('자동 로그인 확인 실패:', error.message);
@@ -48,19 +48,18 @@ export function AuthProvider({ children }) { // 2. fuction -> function 오타 �
     // 6. password 뒤 괄호 ) 누락 수정, 객체 구조 변경
     const login = async (email, password) => { 
         try {
-            const data = await fetchAPI('/auth/login', {
+            const data = await fetchAPI('/member/login', {
                 method: 'POST',
-                body: { email, password },
+                body: { username: email, password },
             });
 
-            localStorage.setItem('token', data.token);
+            localStorage.setItem('token', data.accessToken);
             
             // 7. 객체 내부에 잘못 들어간 'AuthContext' 텍스트 제거
-            setUser({
-                email: data.email,
-                nickname: data.nickname,
-                role: data.role,
+            const profile = await fetchAPI('/member/me', {
+                headers: { 'Authorization': `Bearer ${data.accessToken}` }
             });
+            setUser(profile);
             return data;
         } catch (error) {
             throw error; // 8. 불필요한 괄호 제거
@@ -70,9 +69,9 @@ export function AuthProvider({ children }) { // 2. fuction -> function 오타 �
 
     const signup = async (email, password, nickname) => {
         try {
-            await fetchAPI('/auth/signup', {
+            await fetchAPI('/member/join', {
                 method: 'POST',
-                body: { email, password, nickname },
+                body: { username: email, email, password, name: nickname },
             });
         } catch (error) {
             throw error;
