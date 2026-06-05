@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
 import tacos.TacoOrder;
-import org.apache.catalina.User;
+import tacos.User;
 import tacos.data.OrderRepository;
 
 @Controller
@@ -51,7 +51,7 @@ public class OrderController {
   @PostMapping
   public String processOrder(@Valid TacoOrder order, Errors errors,
       SessionStatus sessionStatus,
-      @AuthenticationPrincipal org.apache.catalina.User user) {
+      @AuthenticationPrincipal User user) {
 
     if (errors.hasErrors()) {
       return "orderForm";

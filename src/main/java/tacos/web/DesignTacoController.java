@@ -19,10 +19,10 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 
 import lombok.extern.slf4j.Slf4j;
 import tacos.Ingredient;
-import java.awt.Window.Type;
+import tacos.Ingredient.Type;
 import tacos.TacoOrder;
 import tacos.Taco;
-import org.apache.catalina.User;
+import tacos.User;
 import tacos.data.IngredientRepository;
 import tacos.data.TacoRepository;
 import tacos.data.UserRepository;
@@ -54,7 +54,7 @@ public class DesignTacoController {
     List<Ingredient> ingredients = new ArrayList<>();
     ingredientRepo.findAll().forEach(i -> ingredients.add(i));
 
-    Type[] types = ingredients.Type.values();
+    Type[] types = Type.values();
     for (Type type : types) {
       model.addAttribute(type.toString().toLowerCase(),
           filterByType(ingredients, type));
@@ -72,9 +72,9 @@ public class DesignTacoController {
   }
 
   @ModelAttribute(name = "user")
-  public org.apache.catalina.User user(Principal principal) {
+  public User user(Principal principal) {
 	    String username = principal.getName();
-	    org.apache.catalina.User user = userRepo.findByUsername(username);
+	    User user = userRepo.findByUsername(username);
 	    return user;
   }
 
